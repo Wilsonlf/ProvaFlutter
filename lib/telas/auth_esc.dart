@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-
-import 'package:prova_p2/telas/verif/login.dart';
-import 'package:prova_p2/telas/home/home.dart';
+import 'verif/login.dart';
+import 'home/home.dart';
 
 class AuthEsc extends StatelessWidget {
   const AuthEsc({super.key});
@@ -13,7 +12,7 @@ class AuthEsc extends StatelessWidget {
     final firebaseUser = context.watch<User?>();
 
     if (firebaseUser != null) {
-      return const HomeScreen();
+      return const Home();
     } else {
       return const LoginScreen();
     }
