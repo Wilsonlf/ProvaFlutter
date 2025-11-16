@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/veiculo.dart';
-import '../../logic/veiculo_logic.dart'; // <-- CORREÇÃO AQUI (era 'services/')
+import '../../logic/veiculo_logic.dart';
 
 class VeiculoForm extends StatefulWidget {
   const VeiculoForm({super.key});
@@ -13,13 +13,11 @@ class VeiculoForm extends StatefulWidget {
 class _VeiculoFormState extends State<VeiculoForm> {
   final _formKey = GlobalKey<FormState>();
 
-  // Controladores para os campos
   final _modeloController = TextEditingController();
   final _marcaController = TextEditingController();
   final _placaController = TextEditingController();
   final _anoController = TextEditingController();
 
-  // Valor selecionado no Dropdown
   String? _tipoCombustivelSelecionado;
   final List<String> _tiposCombustivel = [
     'Gasolina',
@@ -103,7 +101,6 @@ class _VeiculoFormState extends State<VeiculoForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Marca
                 TextFormField(
                   controller: _marcaController,
                   decoration: const InputDecoration(
@@ -118,8 +115,6 @@ class _VeiculoFormState extends State<VeiculoForm> {
                   },
                 ),
                 const SizedBox(height: 16),
-
-                // Modelo
                 TextFormField(
                   controller: _modeloController,
                   decoration: const InputDecoration(

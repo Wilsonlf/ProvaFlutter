@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'telas/auth_esc.dart';
 import 'auth/autenticacao.dart';
 import 'logic/veiculo_logic.dart';
+import 'logic/abastecimento_logic.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -33,6 +34,9 @@ class MyApp extends StatelessWidget {
         ),
         Provider<VeiculoService>(
           create: (_) => VeiculoService(),
+        ),
+        Provider<AbastecimentoService>(
+          create: (_) => AbastecimentoService(),
         ),
       ],
       child: MaterialApp(
