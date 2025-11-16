@@ -20,7 +20,6 @@ class Home extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(user?.displayName ?? 'Meus Veículos'),
-        backgroundColor: Colors.blue[700],
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -38,30 +37,32 @@ class Home extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(user?.displayName ?? 'Usuário',
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold)),
-                  Text(user?.email ?? '',
-                      style:
-                          const TextStyle(color: Colors.white70, fontSize: 14)),
-                ],
+            UserAccountsDrawerHeader(
+              accountName: Text(user?.displayName ?? 'Usuário'),
+              accountEmail: Text(user?.email ?? ''),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors.white.withOpacity(0.1),
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Image.asset(
+                    'assets/images/logo_wl.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
-              decoration: BoxDecoration(color: Colors.blue[700]),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
             ListTile(
+              leading: const Icon(Icons.directions_car),
               title: const Text('Meus Veículos'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
+              leading: const Icon(Icons.history),
               title: const Text('Histórico de Abastecimentos'),
               onTap: () {
                 Navigator.pop(context);
@@ -75,6 +76,7 @@ class Home extends StatelessWidget {
             ),
             const Divider(),
             ListTile(
+              leading: const Icon(Icons.logout),
               title: const Text('Sair'),
               onTap: () {
                 authService.signOut();
@@ -102,50 +104,57 @@ class Home extends StatelessWidget {
             itemCount: veiculos.length,
             itemBuilder: (context, index) {
               final veiculo = veiculos[index];
-              return ListTile(
-                title: Text(
-                  '${veiculo.marca} ${veiculo.modelo}',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text('Placa: ${veiculo.placa} | Ano: ${veiculo.ano}'),
-                trailing: TextButton(
-                  onPressed: () async {
-                    final bool deletar = await showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Confirmar exclusão'),
-                            content: Text(
-                                'Deseja realmente excluir o veículo ${veiculo.modelo}?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, false),
-                                child: const Text('Cancelar'),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, true),
-                                child: const Text('Excluir'),
-                              ),
-                            ],
-                          ),
-                        ) ??
-                        false;
+              return Card(
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: ListTile(
+                  leading: Icon(Icons.directions_car,
+                      color: Theme.of(context).colorScheme.primary),
+                  title: Text(
+                    '${veiculo.marca} ${veiculo.modelo}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle:
+                      Text('Placa: ${veiculo.placa} | Ano: ${veiculo.ano}'),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete_outline,
+                        color: Theme.of(context).colorScheme.error),
+                    onPressed: () async {
+                      final bool deletar = await showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Confirmar exclusão'),
+                              content: Text(
+                                  'Deseja realmente excluir o veículo ${veiculo.modelo}?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(context, false),
+                                  child: const Text('Cancelar'),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: const Text('Excluir'),
+                                ),
+                              ],
+                            ),
+                          ) ??
+                          false;
 
-                    if (deletar && veiculo.id != null) {
-                      veiculoService.deleteVeiculo(veiculo.id!);
-                    }
+                      if (deletar && veiculo.id != null) {
+                        veiculoService.deleteVeiculo(veiculo.id!);
+                      }
+                    },
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            AbastecimentoListaScreen(veiculo: veiculo),
+                      ),
+                    );
                   },
-                  style: TextButton.styleFrom(foregroundColor: Colors.red),
-                  child: const Text('Excluir'),
                 ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          AbastecimentoListaScreen(veiculo: veiculo),
-                    ),
-                  );
-                },
               );
             },
           );
@@ -159,32 +168,38 @@ class Home extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(height: 10),
+          Icon(
+            Icons.directions_car_filled,
+            size: 100,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(height: 20),
           const Text(
             'Nenhum veículo cadastrado',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           const Text(
             'Adicione seu primeiro veículo para começar.',
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: 16),
           ),
-          const SizedBox(height: 24),
-          ElevatedButton(
+          const SizedBox(height: 40),
+          FilledButton.icon(
+            icon: const Icon(Icons.add),
+            label: const Text('Adicionar Veículo'),
+            style: FilledButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              textStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const VeiculoForm()),
               );
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue[700],
-              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-            ),
-            child: const Text(
-              'Adicionar Veículo',
-              style: TextStyle(color: Colors.black),
-            ),
           ),
         ],
       ),
