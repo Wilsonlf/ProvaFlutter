@@ -56,6 +56,9 @@ class _AbastecimentoFormState extends State<AbastecimentoForm> {
         quilometragem: int.parse(_kmController.text),
         tipoCombustivel: widget.veiculo.tipoCombustivel,
         observacao: _obsController.text,
+        veiculoId: widget.veiculo.id!,
+        veiculoNome: "${widget.veiculo.marca} ${widget.veiculo.modelo}",
+        veiculoPlaca: widget.veiculo.placa,
       );
 
       await abastecimentoService.addAbastecimento(

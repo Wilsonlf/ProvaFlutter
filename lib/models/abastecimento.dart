@@ -9,6 +9,9 @@ class Abastecimento {
   final int quilometragem;
   final String tipoCombustivel;
   final String? observacao;
+  final String veiculoId;
+  final String veiculoNome;
+  final String veiculoPlaca;
 
   Abastecimento({
     this.id,
@@ -19,6 +22,9 @@ class Abastecimento {
     required this.quilometragem,
     required this.tipoCombustivel,
     this.observacao,
+    required this.veiculoId,
+    required this.veiculoNome,
+    required this.veiculoPlaca,
   });
 
   Map<String, dynamic> toJson() {
@@ -30,6 +36,9 @@ class Abastecimento {
       'quilometragem': quilometragem,
       'tipoCombustivel': tipoCombustivel,
       'observacao': observacao,
+      'veiculoId': veiculoId,
+      'veiculoNome': veiculoNome,
+      'veiculoPlaca': veiculoPlaca,
     };
   }
 
@@ -44,6 +53,9 @@ class Abastecimento {
       quilometragem: data['quilometragem'] ?? 0,
       tipoCombustivel: data['tipoCombustivel'] ?? '',
       observacao: data['observacao'],
+      veiculoId: data['veiculoId'] ?? '',
+      veiculoNome: data['veiculoNome'] ?? '',
+      veiculoPlaca: data['veiculoPlaca'] ?? '',
     );
   }
 
